@@ -1,13 +1,68 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Resources:
-  Function:
+  ZipFileBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-zipfilebu-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: alias/aws/s3
+      PublicAccessBlockConfiguration:
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  ZipFileBucketBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ZipFileBucket
+      PolicyDocument:
+        Id: RequireEncryptionInTransit
+        Version: '2012-10-17'
+        Statement:
+          - Principal: '*'
+            Action: '*'
+            Effect: Deny
+            Resource:
+              - !GetAtt ZipFileBucket.Arn
+              - !Sub ${ZipFileBucket.Arn}/*
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+  ResultsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-resultsbu-${AWS::AccountId}
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID: alias/aws/s3
+  ResultsBucketBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ResultsBucket
+      PolicyDocument:
+        Id: RequireEncryptionInTransit
+        Version: '2012-10-17'
+        Statement:
+          - Principal: '*'
+            Action: '*'
+            Effect: Deny
+            Resource:
+              - !GetAtt ResultsBucket.Arn
+              - !Sub ${ResultsBucket.Arn}/*
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+  WeatherLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${AWS::StackName}-Function
+      FunctionName: !Sub ${AWS::StackName}-WeatherLambdaFunction
       Description: !Sub
         - Stack ${StackTagName} Environment ${EnvironmentTagName} Function ${ResourceName}
-        - ResourceName: Function
+        - ResourceName: WeatherLambdaFunction
       CodeUri: src/Function
       Handler: handler.handler
       Runtime: python3.8
@@ -17,45 +72,27 @@ Resources:
       Policies:
         - AWSXrayWriteOnlyAccess
         - S3CrudPolicy:
-            BucketName: !Ref Bucket
+            BucketName: !Ref ResultsBucket
       Environment:
         Variables:
-          BUCKET_NAME: !Ref Bucket
-          BUCKET_ARN: !GetAtt Bucket.Arn
-    Condition: FunctionCreateNewResource
-  Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub ${AWS::StackName}-bucket-${AWS::AccountId}
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: aws:kms
-              KMSMasterKeyID: alias/aws/s3
-  BucketBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref Bucket
-      PolicyDocument:
-        Id: RequireEncryptionInTransit
-        Version: '2012-10-17'
-        Statement:
-          - Principal: '*'
-            Action: '*'
-            Effect: Deny
-            Resource:
-              - !GetAtt Bucket.Arn
-              - !Sub ${Bucket.Arn}/*
-            Condition:
-              Bool:
-                aws:SecureTransport: 'false'
-  FunctionExistingResource:
+          BUCKET_NAME: !Ref ResultsBucket
+          BUCKET_ARN: !GetAtt ResultsBucket.Arn
+      Events:
+        ZipFileBucket:
+          Type: S3
+          Properties:
+            Bucket: !Ref ZipFileBucket
+            Events:
+              - s3:ObjectCreated:*
+              - s3:ObjectRemoved:*
+    Condition: WeatherLambdaFunctionCreateNewResource
+  WeatherLambdaFunctionExistingResource:
     Type: Custom::StackeryExistingResource
     Properties:
       ServiceToken: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:stackery-agent-commander
       Type: function
       Data: arn:aws:lambda:<Region>:<AWS Account ID>:function:<Function Name>
-    Condition: FunctionUseExistingResource
+    Condition: WeatherLambdaFunctionUseExistingResource
 Parameters:
   StackTagName:
     Type: String
@@ -64,8 +101,8 @@ Parameters:
     Type: String
     Description: Environment Name (injected by Stackery at deployment time)
 Conditions:
-  FunctionCreateNewResource: !Equals
+  WeatherLambdaFunctionUseExistingResource: !Not
+    - !Condition WeatherLambdaFunctionCreateNewResource
+  WeatherLambdaFunctionCreateNewResource: !Equals
     - 'false'
     - 'true'
-  FunctionUseExistingResource: !Not
-    - !Condition FunctionCreateNewResource
