@@ -85,6 +85,12 @@ Resources:
             Events:
               - s3:ObjectCreated:*
               - s3:ObjectRemoved:*
+        Timer:
+          Type: Schedule
+          Properties:
+            Schedule: rate(60 minutes)
+          Metadata:
+            StackeryName: Every 60 min
 Parameters:
   StackTagName:
     Type: String
