@@ -3,9 +3,6 @@ import requests
 import boto3
 
 def handler(event, context):
-    # Log the event argument for debugging and for use in local development.
-    #print(json.dumps(event))
-    #return {}
     main()
 
     
@@ -40,26 +37,25 @@ def get_weather_forecast(location_id):
         myweather_obsv['time'] = json.dumps(obsv["time"])
         myweather_obsv['temperature'] = json.dumps(obsv["temperature"])
         myweather_resutls_json.append({"observations": [{"time":myweather_obsv['time'],"temperature":myweather_obsv['temperature']}],"location":json.dumps(mylocation)})
-        #print(obsv["time"])
-        #print(obsv["temperature"])
-
-        #myweather_obsv_json = [json.dumps(obsv["time"]), json.dumps(obsv["temperature"])]
     print("result",myweather_resutls_json)
     return myweather_resutls_json
 
+
 def print_to_file(location_forecast_info):
     with open("forecast_data_file.json", "w") as data_file:
-        myobject = json.dump(location_forecast_info, data_file, indent=2)
+        #json.dump(location_forecast_info, data_file, indent=2)
+        myweather_forecast = json.dump(location_forecast_info)
         s3 = boto3.client('s3')
         BUCKET_NAME= 'lambdastackery-dev-ahussain-bucketres-760527956286'
         response = s3.put_object(
             Bucket=BUCKET_NAME,
             Key='weather_data',
-            Body=myobject,
+            Body=myweather_forecast,
             ACL='public-read'
         )
     print(response)
 
+    
 def main():
     API_KEY = 'AGbFAKx58hyjQScCXIYrxuEwJh2W2cmv'
     my_location_id = get_location_id(API_KEY, 'Lerwick,Shetland%20Islands', 'Lerwick')
