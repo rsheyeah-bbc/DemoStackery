@@ -31,9 +31,6 @@ Resources:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: aws:kms
               KMSMasterKeyID: alias/aws/s3
-      PublicAccessBlockConfiguration:
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
   BucketBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -51,11 +48,6 @@ Resources:
             Condition:
               Bool:
                 aws:SecureTransport: 'false'
-  FunctionDeployTrigger:
-    Type: Custom::FunctionDeployTrigger
-    Properties:
-      ServiceToken: !GetAtt Function.Arn
-      DeploymentTimestamp: !Ref DeploymentTimestamp
 Parameters:
   StackTagName:
     Type: String
@@ -63,6 +55,3 @@ Parameters:
   EnvironmentTagName:
     Type: String
     Description: Environment Name (injected by Stackery at deployment time)
-  DeploymentTimestamp:
-    Type: Number
-    Description: Deployment preparation timestamp in milliseconds Since Epoch (injected by Stackery at deployment time)
