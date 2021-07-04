@@ -85,14 +85,6 @@ Resources:
             Events:
               - s3:ObjectCreated:*
               - s3:ObjectRemoved:*
-    Condition: WeatherLambdaFunctionCreateNewResource
-  WeatherLambdaFunctionExistingResource:
-    Type: Custom::StackeryExistingResource
-    Properties:
-      ServiceToken: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:stackery-agent-commander
-      Type: function
-      Data: arn:aws:lambda:<Region>:<AWS Account ID>:function:<Function Name>
-    Condition: WeatherLambdaFunctionUseExistingResource
 Parameters:
   StackTagName:
     Type: String
@@ -100,9 +92,3 @@ Parameters:
   EnvironmentTagName:
     Type: String
     Description: Environment Name (injected by Stackery at deployment time)
-Conditions:
-  WeatherLambdaFunctionUseExistingResource: !Not
-    - !Condition WeatherLambdaFunctionCreateNewResource
-  WeatherLambdaFunctionCreateNewResource: !Equals
-    - 'false'
-    - 'true'
