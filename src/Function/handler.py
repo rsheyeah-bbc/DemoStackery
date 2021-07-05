@@ -42,7 +42,7 @@ def get_weather_forecast(location_id):
 
 
 def print_to_file(location_forecast_info):
-    myweather_forecast = json.dump(location_forecast_info)
+    myweather_forecast = json.dumps(location_forecast_info)
     s3 = boto3.client('s3')
     BUCKET_NAME= 'lambdastackery-dev-ahussain-bucketres-760527956286'
     response = s3.put_object(
