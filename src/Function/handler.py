@@ -37,7 +37,7 @@ def get_weather_forecast(location_id):
         myweather_obsv['time'] = json.dumps(obsv["time"])
         myweather_obsv['temperature'] = json.dumps(obsv["temperature"])
         myweather_resutls_json.append({"observations": [{"time":myweather_obsv['time'],"temperature":myweather_obsv['temperature']}],"location":json.dumps(mylocation)})
-    print("result",myweather_resutls_json)
+        print("result",myweather_resutls_json)
     return myweather_resutls_json
 
 
