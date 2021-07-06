@@ -1,6 +1,6 @@
-# Stackery Blank SAM Template
+# Stackery BBC Weather SAM Template
 
-This is a sample template for a serverless AWS Lambda application.
+This solution involves a serverless AWS Lambda application, that runs every 60 minutes.
 
 Here is an overview of the files:
 
