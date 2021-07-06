@@ -44,12 +44,14 @@ def get_weather_forecast(location_id):
 def print_to_file(location_forecast_info):
     myweather_forecast = json.dumps(location_forecast_info)
     s3 = boto3.client('s3')
+    t = datetime.datetime.utcnow()
+    my_bucket_key = str(t.year)+'/'+str(t.month)+'/'+str(t.day)+'/'+str(t.hour)+'/' + 'weather_data'
     BUCKET_NAME= 'lambdastackery-dev-ahussain-bucketres-760527956286'
     response = s3.put_object(
-            Bucket=BUCKET_NAME,
-            Key='weather_data',
-            Body=myweather_forecast,
-            ACL='public-read'
+        Bucket=BUCKET_NAME,
+        Key=my_bucket_key,
+        Body=myweather_forecast,
+        ACL='public-read'
     )
     print(response)
 
