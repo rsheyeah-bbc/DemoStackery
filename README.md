@@ -1,4 +1,4 @@
-# Weather Cloud Formation templates via SAM Template
+# Weather Cloud Formation templates via SAM Template and Stackery
 
 The cloud formation templates is generated using AWS SAM template, generally used for managing serverless applications
 
