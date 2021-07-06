@@ -1,4 +1,4 @@
-# Weather Script SAM Template
+# Weather Cloud Formation templates via SAM Template
 
 The cloud formation templates is generated using AWS SAM template, generally used for managing serverless applications
 
@@ -12,7 +12,7 @@ Here is an overview of the files:
 ├── README.md                          <-- This README file
 └── template.yaml                      <-- SAM infrastructure-as-code template
 ```
-# Weather Script AWS Lambda solution
+# Weather Script via AWS Lambda solution
 
 This solution involves a serverless AWS Lambda application, that runs every 60 minutes.
 
