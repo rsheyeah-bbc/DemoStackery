@@ -40,7 +40,7 @@ for e.g. os.environ['API_KEY']
 The cloud formation templates, containing the lambda and s3 components and their respective policies are present in the tempalte.yml file. 
 <img width="644" alt="Screenshot 2021-07-06 at 18 41 14" src="https://user-images.githubusercontent.com/16939016/124646818-0c1e4f00-de8d-11eb-8f6b-ec5786cfe856.png">
 
-The Amazon Event Bridge formerly known as Cloud Watch events triggers the lambda function via a scheduled rule , which then processes the script and the results are stored in the S3 bucket. The bucket key is formed as such bucket-name/year/month/date/hour in UTC.
+The Amazon Event Bridge formerly known as Cloud Watch events triggers the lambda function via a scheduled rule , which then processes the script and the results are stored in the S3 bucket. The bucket key is formed as such bucket-name/year/month/date/hour/name_of_file in UTC.
 
 For the purpose of this demo, the schedule is set to run every 5 mins. (It is configurable)
 
