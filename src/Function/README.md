@@ -25,3 +25,8 @@ For the purpose of this demo, the schedule is set to run every 5 mins. (It is co
 The format of the json file to store the temperature and location:
 
 ```[{"observations": [{"time": "{\"utc\": \"2021-07-06T00:00:00Z\", \"timezone\": \"Europe/London\", \"offset\": \"+01:00\"}", "temperature": "{\"c\": 13, \"f\": 55}"}], "location": "{\"name\": \"Lerwick\", \"container\": \"Shetland Islands\"}"}```
+
+# Monitoring 
+As and when the lambda process runs, the events are logged in cloud watch logs.
+<img width="1245" alt="Screenshot 2021-07-06 at 19 46 45" src="https://user-images.githubusercontent.com/16939016/124651707-2a874900-de93-11eb-9c83-e7865ccc01e7.png">
+
