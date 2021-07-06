@@ -1,7 +1,7 @@
 
 This Function contains the scripts to retrieve the temperature information from the BBC Weather API, transform the results into a JSON  and store it in the s3 bucket every 60 minutes.
 
-For the purposes of the demo and in order to save time, and in the absence of Jenkins, stackery has been used to simulate the deployment process of checking code into github and deploying into AWS. We could have used AWS CodeBuild as well, instead. 
+For the purposes of the demo and in order to save time, and in the absence of Jenkins, stackery has been used to simulate the deployment process of checking code into github and deploying into AWS. We could have used AWS CodeBuild as well, instead. AWS SAM provides you with a command line tool, the AWS SAM CLI, that makes it easy for you to create and manage serverless applications.
 
 # Dependencies
 The solution depends on the script hitting the locator service API and weather broker API.
