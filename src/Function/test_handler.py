@@ -1,5 +1,6 @@
 import unittest
-import json
+import boto3
+import datetime
 from main import get_location_id, get_weather_forecast
 
 class TestHandler(unittest.TestCase):
@@ -40,5 +41,6 @@ class TestHandler(unittest.TestCase):
         #print(obj.key)
         self.assertEqual(obj.key,my_bucket_key)        
 
+        
 if __name__ == '__main__':
     unittest.main()
