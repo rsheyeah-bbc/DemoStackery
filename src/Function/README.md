@@ -18,3 +18,7 @@ The cloud formation templates, containing the lambda and s3 components and their
 
 # Results
 <img width="1343" alt="Screenshot 2021-07-06 at 19 04 01" src="https://user-images.githubusercontent.com/16939016/124646791-00cb2380-de8d-11eb-808e-c88d023b659f.png">
+
+The format of the json file to store the temperature and location:
+
+```[{"observations": [{"time": "{\"utc\": \"2021-07-06T00:00:00Z\", \"timezone\": \"Europe/London\", \"offset\": \"+01:00\"}", "temperature": "{\"c\": 13, \"f\": 55}"}], "location": "{\"name\": \"Lerwick\", \"container\": \"Shetland Islands\"}"}```
