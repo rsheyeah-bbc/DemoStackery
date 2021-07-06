@@ -4,7 +4,32 @@ This Function contains the scripts to retrieve the temperature information from 
 For the purposes of the demo and in order to save time, and in the absence of Jenkins, stackery has been used to simulate the deployment process of checking code into github and deploying into AWS. We could have used AWS CodeBuild as well, instead. AWS SAM provides you with a command line tool, the AWS SAM CLI, that makes it easy for you to create and manage serverless applications.
 
 # Dependencies
-The solution depends on the script hitting the locator service API and weather broker API.
+The solution depends on the availability of the locator service API and weather broker API.
+
+``` #Locator Service 
+curl 'https://locator-service.api.bbci.co.uk/locations?api_key=AGbFAKx58hyjQScCXIYrxuEwJh2W2cmv&stack=aws&locale=en&filter=international&place-types=settlement%2Cairport%2Cdistrict&order=importance&s=Lerwick&a=true&format=json' \
+  -H 'sec-ch-ua: " Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"' \
+  -H 'Referer: https://www.bbc.co.uk/' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36' \
+  --compressed 
+  ```
+  ```
+  curl 'https://weather-broker-cdn.api.bbci.co.uk/en/maps/forecasts-observations?locations=2644605' \
+  -H 'authority: weather-broker-cdn.api.bbci.co.uk' \
+  -H 'sec-ch-ua: " Not;A Brand";v="99", "Google Chrome";v="91", "Chromium";v="91"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36' \
+  -H 'accept: */*' \
+  -H 'origin: https://www.bbc.co.uk' \
+  -H 'sec-fetch-site: cross-site' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'referer: https://www.bbc.co.uk/' \
+  -H 'accept-language: en-US,en;q=0.9,en-GB;q=0.8' \
+  -H 'if-none-match: "646e5e1acf37480ac5812d17990bcaa34a4537e5b247968ee93375b4ef0ef4b8"' \
+  --compressed
+  ```
 
 # Further improvements
 The solution can be made re-usable and generic by making use of os parameters. Instead of hard coding the API key, the city name , we can pass them as lambda parameters, through the Environment variables via the cloud formation template, put it in the config dict object and access within the script like
