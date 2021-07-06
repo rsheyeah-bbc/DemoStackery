@@ -1,6 +1,6 @@
-# Stackery BBC Weather SAM Template
+# Weather Script SAM Template
 
-This solution involves a serverless AWS Lambda application, that runs every 60 minutes.
+The cloud formation templates is generated using AWS SAM template, generally used for managing serverless applications
 
 Here is an overview of the files:
 
@@ -12,3 +12,8 @@ Here is an overview of the files:
 ├── README.md                          <-- This README file
 └── template.yaml                      <-- SAM infrastructure-as-code template
 ```
+# Weather Script AWS Lambda solution
+
+This solution involves a serverless AWS Lambda application, that runs every 60 minutes.
+
+https://github.com/rsheyeah-bbc/demostackery/tree/main/src/Function
