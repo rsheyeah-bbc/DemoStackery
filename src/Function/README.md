@@ -17,6 +17,8 @@ The cloud formation templates, containing the lambda and s3 components and their
 
 The Amazon Event Bridge formerly known as Cloud Watch events triggers the lambda function via a scheduled rule , which then processes the script and the results are stored in the S3 bucket. 
 
+For the purpose of this demo, the schedule is set to run every 5 mins. (It is configurable)
+
 # Results
 <img width="1343" alt="Screenshot 2021-07-06 at 19 04 01" src="https://user-images.githubusercontent.com/16939016/124646791-00cb2380-de8d-11eb-808e-c88d023b659f.png">
 
