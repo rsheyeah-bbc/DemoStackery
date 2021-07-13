@@ -12,36 +12,41 @@ def get_location_id(API_KEY,city_name,city):
     url = f"https://locator-service.api.bbci.co.uk/locations?api_key={API_KEY}&stack=aws&locale=en&filter=international&place-types=settlement%2Cairport%2Cdistrict&order=importance&s={city_name}&a=true&format=json"
     payload = {}
     headers = {}
-    response = requests.request("GET", url, headers=headers, data=payload)
-    location_info = response.json()
-    location_results = location_info['response']['results']['results']
-    location_id = 0
-    for loc in location_results:
-        if loc["name"] == city:
-            location_id= loc["id"]
-        else:
-            break
-    return location_id
-
+    try:
+        response = requests.request("GET", url, headers=headers, data=payload)
+        location_info = response.json()
+        location_results = location_info['response']['results']['results']
+        location_id = 0
+        for loc in location_results:
+            if loc["name"] == city:
+                location_id= loc["id"]
+            else:
+                break
+        return location_id
+    except:
+        return location_info
 
 def get_weather_forecast(location_id):
     url = f"https://weather-broker-cdn.api.bbci.co.uk/en/maps/forecasts-observations?locations={location_id}"
     payload = {}
     headers = {}
-    response = requests.request("GET", url, headers=headers, data=payload)
-    location_forecast_observations_response = response.json()
-    print(f'Weather forecast of location, {location_forecast_observations_response}')
-    observations = location_forecast_observations_response['features'][0]['properties']['observations']
-    mylocation = location_forecast_observations_response['features'][0]['properties']['location']
-    myweather_resutls_json = []
-    myweather_obsv = {}
-    for obsv in observations:
-        myweather_obsv['time'] = json.dumps(obsv["time"])
-        myweather_obsv['temperature'] = json.dumps(obsv["temperature"])
-        myweather_resutls_json.append({"observations": [{"time":myweather_obsv['time'],"temperature":myweather_obsv['temperature']}],"location":json.dumps(mylocation)})
-        time.sleep(1)
-    print("result",myweather_resutls_json)
-    return myweather_resutls_json
+    try:
+        response = requests.request("GET", url, headers=headers, data=payload)
+        location_forecast_observations_response = response.json()
+        print(f'Weather forecast of location, {location_forecast_observations_response}')
+        observations = location_forecast_observations_response['features'][0]['properties']['observations']
+        mylocation = location_forecast_observations_response['features'][0]['properties']['location']
+        myweather_resutls_json = []
+        myweather_obsv = {}
+        for obsv in observations:
+            myweather_obsv['time'] = json.dumps(obsv["time"])
+            myweather_obsv['temperature'] = json.dumps(obsv["temperature"])
+            myweather_resutls_json.append({"observations": [{"time":myweather_obsv['time'],"temperature":myweather_obsv['temperature']}],"location":json.dumps(mylocation)})
+            time.sleep(1)
+        print("result",myweather_resutls_json)
+        return myweather_resutls_json
+    except:
+        return location_forecast_observations_response
 
 
 def print_to_file(location_forecast_info):
